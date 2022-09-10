@@ -1,4 +1,4 @@
-module github.com/yyamanoi1222/redrive_fifo
+module github.com/yyamanoi1222/redrive_sqs
 
 go 1.17
 
