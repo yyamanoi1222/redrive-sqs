@@ -2,6 +2,12 @@
 
 CLI tool to migrate messages in DLQ
 
+# Install
+
+```
+$ go install github.com/yyamanoi1222/redrive_sqs@lates
+```
+
 # Usage
 
 ```
