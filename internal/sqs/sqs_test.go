@@ -1,4 +1,4 @@
-package main
+package sqs
 
 import (
   "testing"
@@ -13,7 +13,7 @@ const queueUrl = endpoint + "/000000000000/test"
 
 func prepareInstance() *SQS {
   s := &SQS{}
-  s.init(Config{Endpoint: endpoint})
+  s.Init(Config{Endpoint: endpoint})
   return s
 }
 
@@ -43,8 +43,8 @@ func TestMain(m *testing.M) {
 func TestReceiveMessage(t *testing.T) {
   s := prepareInstance()
   msg := createDummyMessage()
-  s.sendMessage(queueUrl, msg)
-  msgs, err := s.receiveMessage(queueUrl)
+  s.SendMessage(queueUrl, msg)
+  msgs, err := s.ReceiveMessage(queueUrl)
 
   if err != nil {
     t.Errorf("err %s", err)
@@ -58,7 +58,7 @@ func TestReceiveMessage(t *testing.T) {
 func TestSendMessage(t *testing.T) {
   s := prepareInstance()
   msg := createDummyMessage()
-  if err := s.sendMessage(queueUrl, msg); err != nil {
+  if err := s.SendMessage(queueUrl, msg); err != nil {
     t.Errorf("err %s", err)
   }
 }
@@ -66,10 +66,10 @@ func TestSendMessage(t *testing.T) {
 func TestDeleteMessage(t *testing.T) {
   s := prepareInstance()
   msg := createDummyMessage()
-  s.sendMessage(queueUrl, msg)
-  msgs, _ := s.receiveMessage(queueUrl)
+  s.SendMessage(queueUrl, msg)
+  msgs, _ := s.ReceiveMessage(queueUrl)
 
-  if err := s.deleteMessage(queueUrl, *msgs[0].ReceiptHandle); err != nil {
+  if err := s.DeleteMessage(queueUrl, *msgs[0].ReceiptHandle); err != nil {
     t.Errorf("err %s", err)
   }
 }

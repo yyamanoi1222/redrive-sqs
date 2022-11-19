@@ -1,4 +1,4 @@
-package main
+package sqs
 
 import (
   "github.com/aws/aws-sdk-go/aws"
@@ -19,7 +19,7 @@ type Config struct {
 
 const MAX_MESSAGE_RECEIVE_COUNT = 10
 
-func (s *SQS) init(cfg Config) {
+func (s *SQS) Init(cfg Config) {
   sess := session.Must(session.NewSessionWithOptions(session.Options{SharedConfigState: session.SharedConfigEnable}))
   awsCfg := aws.Config{}
 
@@ -29,7 +29,7 @@ func (s *SQS) init(cfg Config) {
   s.cl = sqs.New(sess, &awsCfg)
 }
 
-func (s *SQS) receiveMessage(queueUrl string) ([]Message, error) {
+func (s *SQS) ReceiveMessage(queueUrl string) ([]Message, error) {
   res, err := s.cl.ReceiveMessage(&sqs.ReceiveMessageInput{
     QueueUrl: aws.String(queueUrl),
     AttributeNames: []*string{
@@ -57,7 +57,7 @@ func (s *SQS) receiveMessage(queueUrl string) ([]Message, error) {
   return msgs, err
 }
 
-func (s *SQS) sendMessage(queueUrl string, msg Message) error {
+func (s *SQS) SendMessage(queueUrl string, msg Message) error {
   input := sqs.SendMessageInput{
     MessageAttributes: msg.MessageAttributes,
     MessageBody: msg.Body,
@@ -73,7 +73,7 @@ func (s *SQS) sendMessage(queueUrl string, msg Message) error {
   return err
 }
 
-func (s *SQS) deleteMessage(queueUrl string, receiptHandle string) error {
+func (s *SQS) DeleteMessage(queueUrl string, receiptHandle string) error {
   _, err := s.cl.DeleteMessage(&sqs.DeleteMessageInput{
     QueueUrl: aws.String(queueUrl),
     ReceiptHandle: aws.String(receiptHandle),
