@@ -1,0 +1,17 @@
+before:
+  hooks:
+    - go mod tidy
+builds:
+  - dir: cmd/redrive-sqs
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+archives:
+  - name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    replacements:
+      darwin: macos
+      linux: linux
+      amd64: amd64
